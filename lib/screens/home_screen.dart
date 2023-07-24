@@ -22,19 +22,28 @@ class _HomeScreenState extends State<HomeScreen> {
   late Geocoding geocoding;
   late Weather weather;
   final String apiKey = '3905c4192a768cbe8ae43cd1b508abd5';
+  late TextEditingController cityNameController;
 
-  // @override
-  // void initState() {
-  //   super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  //   if (isLoading == true) {
-  //     getWeatherData(countryCode: '+880', cityName: 'Boise').then((value) {
-  //       setState(() {
-  //         isLoading = false;
-  //       });
-  //     });
-  //   }
-  // }
+    cityNameController = TextEditingController();
+
+    // if (isLoading == true) {
+    //   getWeatherData(countryCode: '+880', cityName: 'Boise').then((value) {
+    //     setState(() {
+    //       isLoading = false;
+    //     });
+    //   });
+    // }
+  }
+
+  @override
+  dispose() {
+    cityNameController.dispose();
+    super.dispose();
+  }
 
   Future<bool> getWeatherData({
     required String cityName,
@@ -119,9 +128,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding:
                         const EdgeInsets.only(top: 60, left: 10, right: 10),
                     child: TextField(
+                      controller: cityNameController,
                       decoration: InputDecoration(
                         labelText: 'Enter City Name.',
                         hintText: 'Mirpur 2',
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              cityName = cityNameController.text.trim();
+                            });
+                          },
+                          icon: const Icon(Icons.search),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(color: Colors.white),
